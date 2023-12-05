@@ -50,6 +50,7 @@ The _step_01_fit_pmoc_parameters.m_ wrapper script saves the PMOC parameter esti
 
 The actual robustness analysis in Sloan and Feng (2023) was performed using R rather than MATLAB. The script _01-codes/01-scripts/02-fit-pmoc-model/step_02_export_fit_to_excel_for_r.m_ loads in the _site_id_FF_AFM.mat_, reformats the columns, removes outliers in parameter estimates and performance, and saves a .csv file to _03-outputs/01-estimated-pmoc-parameters/02-excel/_. The outlier removal criteria is $G_1$ and $G_1/VPD^m$ estimates outside the range of -10 to 50 or LCE less than -10. This criteria removes erratic and unrealistic parameter estimates that result from correlated parameters and noisy eddy covariance data. Across the 151 sites, the median outlier removal percentage is 0.9%, while only two sites exceed 5% removal (AR_SLu, 7.8% and CN_Dan, 11.6%). The outlier removal results are stored in  _01-codes/01-scripts/02-fit-pmoc-model/factorial_fit_outliers.mat_. These removals could introduce bias into the downstream analysis, given it unbalances the factorial design, but we assume this risk is negligible. Future refinements could bolster the parameter estimation with multiple starts to ensure more stable parameter estimates.
 
+# Robust Ecosystem Soil Water Stress Analysis in R
 
 
 
