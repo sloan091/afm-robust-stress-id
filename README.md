@@ -10,6 +10,7 @@ I have tried to include all necessary codes to re-create my analysis and figures
 
 ## Data Pre-processsing
 The codes for pre-processing of eddy covariance and LAI data are located under _01-codes/01-scripts/01-clean-data/_. The reader is referred to Sect. 2.1.1 and S1 of Sloan and Feng (2023) for full pre-processing details.
+
 ### FLUXNET2015 and AmeriFlux-FLUXNET Data
 We selected a total of 151 out of 229 available eddy covariances sites from the FLUXNET2015 (https://fluxnet.org/data/fluxnet2015-dataset/) and AmeriFlux-FLUXNET (https://ameriflux.lbl.gov/data/download-data/) data sets based on adequate data coverage of variables relevant to detecting ecosystem soil water stress with the PMOC model (see Sect. S1 of Sloan and Feng, 2023). The codes included in _01-codes/01-scripts/01-clean-data/01-eddy-covariance/_ perform the following steps:
 
@@ -21,3 +22,9 @@ We selected a total of 151 out of 229 available eddy covariances sites from the 
 At the time of analysis, there were 229 potential eddy covariance sites (_01-codes\01-scripts\00_setting_files\potential-ec-sites.mat_). Site selection was an iterative process of checking data coverage (_ec_site_coverage.mat_) as well as other relevant metadata (vegetation height, crop rotations, etc). The final eddy covariance sites are provided in _01-codes\01-scripts\00_setting_files\final-ec-site-properties.mat_ and shown in Table S1 of Sloan and Feng (2023).
 
 ### MODIS Leaf Area Index (LAI) Data
+The MODIS LAI data was one of the selected treatment levels to control for the influence of vegetation dynamics on soil water stress inference (see Fig. 2 of paper). The LAI data was downloaded for each site with the ORNL DAAC's Terrestrial Ecology Subsetting & Visualization Services (TESViS, https://modis.ornl.gov/). The codes included in _01-codes/01-scripts/01-clean-data/02-modis-lai/_ perform the following steps:
+
+* _step_01_download_modis_lai.m_: Automatically downloads the raw MODIS LAI and fPAR (MOD15A3H) as well as EVI and NDVI (MOD13Q1) data products. I have included sample outputs from this code under _02-data\01-raw\01-modis-lai\_ for both US-Me1 and US-Me1.
+* _step_02_filter_modis_lai.m_: Smooths the noisy LAI data using a short- and long-term filter similar to the methods in Ukkola et al. (2022). I have included sample outputs and figures for US-Me1 and US-Me2 in _02-data\02-processed\01-modis-lai\_. The _site_id_LAI_FLX15.mat_ files are used to normalize the relevant fluxes in the PMOC model. See Sect. S6 of the paper for details on LAI processing.
+
+
