@@ -3,13 +3,27 @@ library("latex2exp")
 # Load required libraries
 #========================
 loadPacks = function(...){
-  # Loading the essential libraries. 
-  library("RColorBrewer"); library("latex2exp");
-  library("ggplot2"); library("forcats")
-  library("readxl");library("tibble"); library("tidyverse"); library("dplyr");
-  library("broom");library("ggh4x");library("cowplot"); library("patchwork");
+  # Loading the essential libraries
+  baselibs =  c(
+    "hrbrthemes",
+    "RColorBrewer",
+    "latex2exp",
+    "ggplot2",
+    "dplyr",
+    "forcats",
+    "readxl",
+    "tibble",
+    "tidyverse",
+    "ggh4x",
+    "ggpubr",
+    "tidyr",
+    "cowplot",
+    "patchwork",
+    "broom",
+    ...
+  )
   # Additional packages
-  lapply(..., require, character.only = TRUE) 
+  lapply(baselibs, require, character.only = TRUE) 
 }
 
 
@@ -51,48 +65,6 @@ bpfxn <- function(mdl,.x,bins){
   bpStats <- tibble(bp,relBIC,absR2,relDev,relR2)
   return(bpStats)
 }
-
-# # New breakpoint function; LEFT OFF TRYING TO GET MAPPING WORKING
-# #===================================================
-# bpfxn2 <- function(mdlfrm,data,bins){
-#   
-#   bpdt <- function(Fct,mdlfrm,bins,data){
-#     bps <- data %>% group_by(Fct) %>% nest() %>% ungroup() %>% 
-#       mutate(fit - ~map())
-#     mdl <- lm(mdlfrm,data = data)
-#     bp <- unname(tidy(davies.test(
-#     mdl,
-#     seg.Z = ~ SWC_nep,
-#     values = bins
-#     ))$statistic)
-#     return(bp)}
-#   # bp <- unname(tidy(davies.test(
-#   #   mdl,
-#   #   seg.Z = ~ SWC_nep,
-#   #   values = bins
-#   # ))$statistic)
-#   bps <- data %>% summarize(across(Fct1:Fct2,~bpdt(mdlfrm(cur_column(),'pvVal'),bins,data)))
-#   
-#   # Use breakpoint from Davies test
-#   mdl.sg <-
-#     segmented(
-#       mdl,
-#       seg.Z = ~ SWC_nep,
-#       psi = bp,
-#       control = seg.control(it.max = 0)
-#     )
-#   
-#   # Store summary statistics of each model
-#   relBIC <- (glance(mdl)$BIC - glance(mdl.sg)$BIC)/abs(glance(mdl)$BIC)
-#   absR2 <-
-#     (glance(mdl.sg)$adj.r.squared - glance(mdl)$adj.r.squared)
-#   relR2 <- absR2/glance(mdl)$adj.r.squared
-#   relDev <-
-#     (glance(mdl)$deviance - glance(mdl.sg)$deviance) / abs(glance(mdl)$deviance)
-#   bpStats <- tibble(bp,relBIC,absR2,relDev,relR2)
-#   return(bpStats)
-# }
-
 
 # Get beta main effects from lm using emmeans or emtrends
 #========================================================
@@ -326,3 +298,45 @@ TrtLvlNames <-  c(
   "Fct8:1" = "No LAI",
   "Fct8:2" = "LAI"
 )
+
+# Heatmap helper fxn - Continuous color
+htHelp = function(htMat, xnm, ynm, htnm, ttl, xlab, ylab) {
+  gh = ggplot(htMat,
+              aes_string(x = xnm, y = ynm, fill = htnm)) +
+    geom_tile(color = "gray", aes(height = 1, width = 1)) +
+    coord_fixed() +
+    labs(x = xlab, y = ylab) +
+    guides(fill = guide_colorbar(
+      title = ttl,
+      title.position = "top",
+      title.hjust = 0.5,
+      title.theme = element_text(size  = 8)
+    )) +
+    theme_cowplot(8) +
+    theme(
+      legend.position = "top",
+      legend.key.width = unit(0.1, "in"),
+      axis.text.x = element_text(angle = 90, vjust = 0.5),
+      legend.justification = "center"
+    )
+  return(gh)
+  
+}
+
+# Heatmap helper fxn - Discrete color
+htdisHelp = function(htMat, xnm, ynm, htnm, ttl, xlab, ylab) {
+  gh = ggplot(htMat,
+              aes_string(x = xnm, y = ynm, fill = htnm)) +
+    geom_tile(color = "gray", aes(height = 1, width = 1)) +
+    coord_fixed() +
+    labs(x = xlab, y = ylab) +
+    theme_cowplot(8) +
+    theme(
+      legend.position = "top",
+      legend.key.width = unit(0.1, "in"),
+      legend.justification = "center",
+      axis.text.x = element_text(angle = 90, vjust = 0.5)
+    )
+  return(gh)
+  
+}

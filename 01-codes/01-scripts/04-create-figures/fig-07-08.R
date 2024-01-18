@@ -438,6 +438,4 @@ g.print <- (g1 + g2 + g3) + plot_layout(ncol = 3) + plot_annotation(
 ggsave2(paste0(svpath,"/fig-07-08-",IGBPsel,".pdf"),
         width = 8, height = 11, units = "in")
 
-
-
 }

@@ -10,13 +10,14 @@
 # Load libraries and add datasets
 gc(reset = TRUE)  
 rm(list = ls())
-source("./Fxns/FLUXNET_Treatment_Avg_Plot_Functions.R")
-loadPacks("ggridges","egg")
+source("./01-codes/02-functions/04-robustness/robustness-helper-fxns.R")
+load("./01-codes/01-scripts/00-setting-files/final_ec_site_properties_for_r.RData")
+load("./03-outputs/02-robust-framework/02-robust-summary/SlpPrfDist_Stats.RData")
+svpath <- "./03-outputs/03-figures/"
+loadPacks(c("ggridges","egg"))
 select <- dplyr::select
-load("./Outputs/Robust_AFM/SlpPrfDist_Stats.RData")
-load("./Setting_Files/R_FLUXNET2015_SiteProp.RData")
 prf.vars = c("LCE","AfT1","AfT2","AfT3")
-v <- "_Rev"
+svpath <- "./03-outputs/03-figures/"
 
 # Plot settings
 # Font size
@@ -59,7 +60,7 @@ Prf.Sel <- Slp.Sel2 %>% group_by(SiteID) %>%
 
 # Helper functions to load slope files
 Slp.ldfxn <- function(ID,flt){
-  load(paste0("./Outputs/SlpPrfDist_Fits/",ID,"_SlpPrfDist.RData"))
+  load(paste0("./03-outputs/02-robust-framework/01-stress-perf-dist/",ID,"_SlpPrfDist.RData"))
   flt <- flt %>% filter(SiteID == ID)
   Slp.flt <- Slp %>% left_join(flt,by = c("pvID")) %>% 
     filter(WetID == WetIDSel) %>% mutate(SiteID = as.factor(ID))
@@ -68,7 +69,7 @@ Slp.ldfxn <- function(ID,flt){
 
 # Helper functions to load performance files
 Prf.ldfxn <- function(ID,flt){
-  load(paste0("./Outputs/SlpPrfDist_Fits/",ID,"_SlpPrfDist.RData"))
+  load(paste0("./03-outputs/02-robust-framework/01-stress-perf-dist/",ID,"_SlpPrfDist.RData"))
   flt <- flt %>% filter(SiteID == ID)
   Prf.flt <- Prf %>% filter(WetID == flt$WetIDSel) %>% 
     mutate(SiteID = as.factor(ID))
@@ -132,7 +133,7 @@ tag_facet(g.slp, open = "",size = fs/2.75) +
     axis.text.y = element_blank()
   ) 
 # Save figure
-ggsave2(paste0("./Figs/AFM/Revision/Fig_6_7/Fig6_Slp",v,".pdf"),
+ggsave2(paste0(svpath, "fig-03.pdf"),
         width = 3, height = 5, units = "in")
 
 
@@ -203,5 +204,5 @@ tag_facet(g.prf, open = "", size = fs/2.75) +
     axis.text.y = element_blank()
   ) 
 # Save figure
-ggsave2(paste0("./Figs/AFM/Revision/Fig_6_7/Fig7_Prf",v,".pdf"),
+ggsave2(paste0(svpath,"fig-04.pdf"),
         width = 6, height = 4, units = "in")

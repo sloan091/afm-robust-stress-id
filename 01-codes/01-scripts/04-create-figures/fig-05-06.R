@@ -1,24 +1,22 @@
 #===============================================================================
-# Name: Fig_4to5_Rev
+# Name: fig-05-06
 # By: Brandon Sloan
-# Last Updated: 6/1/23
-# Description: This script creates the biome specific boxplots of stress signal
-# (Fig. 4) and performance (Fig. 5) from Sloan and Feng (2023)
+# Last Updated: 1/17/24
+#
+# Description: This script creates the ecosystem specific boxplots of stress signal
+# (Fig. 5) and performance (Fig. 6) from Sloan and Feng (2023)
 #===============================================================================
 
 # Load libraries and add datasets
 gc(reset = TRUE)  
 rm(list = ls())
-source("./Fxns/FLUXNET_Treatment_Avg_Plot_Functions.R")
-loadPacks("glmnet","leaps","caret")
-load(paste0("./Outputs/Robust_AFM/SlpPrfDist_Stats.RData"))
-load("./Setting_Files/R_FLUXNET2015_SiteProp.RData")
-svpath <- "./Figs/AFM/minor-revision/Fig_4_5/"
-v <- "_mrev"
+source("./01-codes/02-functions/04-robustness/robustness-helper-fxns.R")
+load("./01-codes/01-scripts/00-setting-files/final_ec_site_properties_for_r.RData")
+load("./03-outputs/02-robust-framework/02-robust-summary/SlpPrfDist_Stats.RData")
+svpath <- "./03-outputs/03-figures/"
 
 # Axis properties
 fs <- 8
-#ft <- c("CMU Classical Serif")
 lw.ax <- 0.25
 
 # Jitter point properties
@@ -39,15 +37,6 @@ fD.Slp = Slp.Sel %>%
 
 # Select only on plant variable for performance plots
 fD.Prf <- fD.Slp %>% filter(pvID == "G_1")
-# fD.Prf2 <-
-#   fD.Prf %>%  pivot_longer(
-#     cols = contains(all_of(c(
-#       "LCE", "AfT1", "AfT2", "AfT3"
-#     ))) & !contains(".max"),
-#     names_to = c("mtcID", "mtcType"),
-#     names_sep = "_",
-#     values_to = "Score"
-#   )
 
 # Add new dryness index
 fD.Slp <-
@@ -55,15 +44,6 @@ fD.Slp <-
 fD.Prf <-
   fD.Prf %>% left_join(Site[, c("SiteID", "DI.f3")], by = "SiteID", suffix = c("", ".y"))
 
-
-# mdl <- Slp.Sel %>% filter(pvID %in% "G_1") %>% 
-# aov(Slp_mn ~ IGBP + DI.f3,data = .)
-# summary(mdl)
-# Anova(mdl, type = "III")
-# # Extract the residuals
-# aov_residuals <- residuals(object = mdl)
-# # Run Shapiro-Wilk test
-# shapiro.test(x = aov_residuals )
 
 # Fig. 4: Slope and SNR by biomes
 #================================
@@ -143,7 +123,7 @@ fig4 <- g1 / g2 + plot_layout(guides = "collect") &
   theme(legend.position = 'bottom') &
   plot_annotation(tag_levels = 'a',tag_suffix = ')')
 ggsave(
-  paste0(svpath, "fig-5-stress-cat.pdf"),
+  paste0(svpath, "fig-05.pdf"),
   plot = fig4,
   width = 7,
   height = 4,
@@ -262,7 +242,8 @@ gpAfsnr <- fD.Prf %>%
   theme(axis.text.x = element_text(angle = 0,vjust = 0.5))
 (gpL + gpAf)/(gpLsnr + gpAfsnr)+ plot_layout(guides = "collect") & theme(legend.position = 'bottom') &
   plot_annotation(tag_levels = 'a',tag_suffix = ')')
-ggsave2(paste0(svpath,"fig-6-prf-cat.pdf"),width = 6,height = 4,units = "in")
+
+ggsave2(paste0(svpath,"fig-06.pdf"),width = 6,height = 4,units = "in")
 
 
 
