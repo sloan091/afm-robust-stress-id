@@ -1,9 +1,9 @@
 ################################################################################ 
-# Name: fig-s04-s07
+# Name: fig-s06-s09
 # By: Brandon Sloan
 # Last Updated: 1/16/24
 #
-# Description: Creates supplementary Figure S4 and S7 from Sloan and Feng (2023).
+# Description: Creates supplementary Figure S6 and S9 from Sloan and Feng (2023).
 ################################################################################
 
 
@@ -28,7 +28,7 @@ sz = 0.5
 lw = 0.1
 ft = 1
 
-# Fig. S4: Observed Years
+# Fig. S6: Observed Years
 #========================
 g.hst <- Site %>%
   ggplot(aes(x = nyrs)) +
@@ -44,7 +44,7 @@ g.cdf <-
 g.hst / g.cdf + plot_annotation(tag_levels = 'a', tag_suffix = ')')
 
 ggsave2(
-  paste0(svpath, "fig-s04.png"),
+  paste0(svpath, "fig-s06.png"),
   width = 3,
   height = 4,
   units = "in"
@@ -73,5 +73,5 @@ Site %>%
   theme_cowplot(fs, line_size = lw.ax) +
   theme(axis.text.x = element_text(angle = 0,vjust = 0.5))
 
-ggsave2(paste0(svpath,"fig-s07.png"),width = 5,height = 2,units = "in")
+ggsave2(paste0(svpath,"fig-s09.png"),width = 5,height = 2,units = "in")
 
