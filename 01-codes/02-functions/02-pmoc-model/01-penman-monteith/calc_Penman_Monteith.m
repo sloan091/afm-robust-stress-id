@@ -131,7 +131,7 @@ G_c_p = MolFlux2mps(G_c,PM_inp.P_a,PM_inp.T_a);
 if isinf(G_c)
     G_w = G_a;
 elseif isinf(G_a)
-    G_w = G_s;
+    G_w = G_c_p;
 else
     G_w = G_a.*G_c_p./(G_a + G_c_p);
 end
